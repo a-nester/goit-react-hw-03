@@ -16,7 +16,7 @@ export const ContactForm = ({ onSubmit, contacts }) => {
     });
 
     if (newElem.length > 0) {
-      alert("Такий номер вже існує");
+      alert("This number is allready exist");
       return;
     } else {
       onSubmit([
