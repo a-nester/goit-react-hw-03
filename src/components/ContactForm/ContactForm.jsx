@@ -2,7 +2,7 @@ import { useId } from "react";
 import css from "./ContactForm.module.css";
 import { Button } from "../Button/Button";
 
-export const ContactForm = ({ onSubmit }) => {
+export const ContactForm = ({ onSubmit, contacts }) => {
   const idName = useId();
   const idPhone = useId();
 
@@ -11,10 +11,23 @@ export const ContactForm = ({ onSubmit }) => {
     const contactName = evt.target.elements.name.value;
     const contactPhone = evt.target.elements.phone.value;
 
-    onSubmit({
-      name: contactName,
-      phone: contactPhone,
+    const newElem = contacts.filter((el) => {
+      return el.phone === contactPhone;
     });
+
+    if (newElem.length > 0) {
+      alert("Такий номер вже існує");
+      return;
+    } else {
+      onSubmit([
+        ...contacts,
+        {
+          id: `id-${contacts.length + 1}`,
+          name: contactName,
+          number: contactPhone,
+        },
+      ]);
+    }
   };
 
   return (
