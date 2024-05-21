@@ -19,14 +19,11 @@ export const ContactForm = ({ onSubmit, contacts }) => {
       alert("This number is allready exist");
       return;
     } else {
-      onSubmit([
-        ...contacts,
-        {
-          id: `id-${contacts.length + 1}`,
-          name: contactName,
-          number: contactPhone,
-        },
-      ]);
+      onSubmit({
+        id: `id-${contacts.length + 1}`,
+        name: contactName,
+        number: contactPhone,
+      });
     }
   };
 

@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import { ContactForm } from "./components/ContactForm/ContactForm";
 import { ContactList } from "./components/ContactList/ContactList";
+import { SearchBox } from "./components/SearchBox/SearchBox";
 
 function App() {
   const [contacts, setContact] = useState([
@@ -11,10 +12,30 @@ function App() {
     { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
   ]);
 
+  const addContact = (newContact) => {
+    setContact((prevContacts) => {
+      return [...prevContacts, newContact];
+    });
+  };
+
+  const delContact = (contactId) => {
+    setContact((prevContacts) => {
+      return prevContacts.filter((el) => {
+        el.id !== contactId;
+      });
+    });
+  };
+
+  const [searchValue, setSearchValue] = useState("");
   return (
     <>
-      <ContactForm onSubmit={setContact} contacts={contacts} />
-      <ContactList contacts={contacts} />
+      <ContactForm onSubmit={addContact} contacts={contacts} />
+      <SearchBox onChange={setSearchValue} />
+      <ContactList
+        contacts={contacts}
+        value={searchValue}
+        onDelete={delContact}
+      />
     </>
   );
 }
