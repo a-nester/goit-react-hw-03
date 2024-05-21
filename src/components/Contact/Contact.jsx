@@ -1,10 +1,6 @@
-import Button from "../Button/Button";
 import css from "./Contact.module.css";
 
-// import { icon } from "react";
-
 export const Contact = ({ element: { id, name, number }, onDelete }) => {
-  // console.log(id, name, number);
   return (
     <>
       <div className={css.item}>

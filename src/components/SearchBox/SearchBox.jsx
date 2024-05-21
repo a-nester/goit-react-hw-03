@@ -1,10 +1,12 @@
-export const SearchBox = ({ onChange }) => {
-  const handleChange = (evt) => {
-    onChange({ searchValue: evt.target.value });
-  };
+import css from "./SearchBox.module.css";
 
+export const SearchBox = ({ value, onChange }) => {
   return (
-    <form className="" onChange={handleChange}>
+    <form
+      className={css.form}
+      value={value}
+      onChange={(evt) => onChange(evt.target.value)}
+    >
       <label>Find contact by name</label>
       <input type="text"></input>
     </form>

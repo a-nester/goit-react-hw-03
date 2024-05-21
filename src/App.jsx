@@ -11,6 +11,7 @@ function App() {
     { id: "id-3", name: "Eden Clements", number: "645-17-79" },
     { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
   ]);
+  const [searchValue, setSearchValue] = useState(" ");
 
   const addContact = (newContact) => {
     setContact((prevContacts) => {
@@ -21,21 +22,22 @@ function App() {
   const delContact = (contactId) => {
     setContact((prevContacts) => {
       return prevContacts.filter((el) => {
-        el.id !== contactId;
+        return el.id !== contactId;
       });
     });
   };
 
-  const [searchValue, setSearchValue] = useState("");
+  const filtered = contacts.filter((elem) => {
+    return elem.name.toLowerCase().includes(searchValue.toLowerCase());
+  });
+
   return (
     <>
-      <ContactForm onSubmit={addContact} contacts={contacts} />
-      <SearchBox onChange={setSearchValue} />
-      <ContactList
-        contacts={contacts}
-        value={searchValue}
-        onDelete={delContact}
-      />
+      <div>
+        <ContactForm onSubmit={addContact} contacts={contacts} />
+        <SearchBox value={searchValue} onChange={setSearchValue} />
+      </div>
+      <ContactList contacts={filtered} onDelete={delContact} />
     </>
   );
 }
