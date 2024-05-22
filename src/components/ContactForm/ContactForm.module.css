@@ -30,3 +30,7 @@
   border: 2px solid #1825e0;
   outline-style: none;
 }
+
+.error {
+  color: red;
+}

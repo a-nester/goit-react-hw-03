@@ -1,16 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import { ContactForm } from "./components/ContactForm/ContactForm";
 import { ContactList } from "./components/ContactList/ContactList";
 import { SearchBox } from "./components/SearchBox/SearchBox";
+import { contactList } from "./components/helper";
 
 function App() {
-  const [contacts, setContact] = useState([
-    { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-    { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-    { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-    { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-  ]);
+  const savedContactList = JSON.parse(
+    window.localStorage.getItem("saved-contacts")
+  );
+  const [contacts, setContact] = useState(savedContactList || contactList);
+
+  useEffect(() => {
+    window.localStorage.setItem("saved-contacts", JSON.stringify(contacts));
+  }, [contacts]);
+
   const [searchValue, setSearchValue] = useState(" ");
 
   const addContact = (newContact) => {

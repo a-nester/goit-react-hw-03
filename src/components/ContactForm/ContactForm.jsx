@@ -1,102 +1,56 @@
 import { useId } from "react";
-import { Formik } from "formik";
-import * as Yup from "yup";
-
-import css from "./ContactForm.module.css";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { nanoid } from "nanoid";
+import { ValidSchema, initialValues } from "../helper";
 import { Button } from "../Button/Button";
 
-export const ContactForm = ({ onSubmit, contacts }) => {
+import css from "./ContactForm.module.css";
+
+export const ContactForm = ({ onSubmit }) => {
   const idName = useId();
-  const idPhone = useId();
+  const idNumber = useId();
+  const idCard = nanoid();
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    const contactName = evt.target.elements.name.value;
-    const contactPhone = evt.target.elements.phone.value;
-
-    const newElem = contacts.filter((el) => {
-      return el.phone === contactPhone;
+  const handleSubmit = (initialValues, actions) => {
+    actions.resetForm();
+    onSubmit({
+      id: idCard,
+      name: initialValues.name,
+      number: initialValues.number,
     });
-
-    if (newElem.length > 0) {
-      alert("This number is allready exist");
-      return;
-    } else {
-      onSubmit({
-        id: `id-${contacts.length + 1}`,
-        name: contactName,
-        number: contactPhone,
-      });
-    }
   };
 
   return (
     <>
       <Formik
-        initialValues={{ name: "", password: "" }}
-        validate={(values) => {
-          const errors = {};
-          if (!values.name) {
-            errors.name = "Required";
-          } else if (!/^[A-Z]+[A-Z]{2,}$/i.test(values.name)) {
-            errors.name = "Invalid name";
-          }
-          return errors;
-        }}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
-        }}
+        initialValues={initialValues}
+        validationSchema={ValidSchema}
+        onSubmit={handleSubmit}
       >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-          /* and other goodies */
-        }) => (
-          <form className={css.form} onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="name"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.name}
-            />
-            {errors.name && touched.name && errors.name}
-            <input
-              type="password"
-              name="password"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.password}
-            />
-            {errors.password && touched.password && errors.password}
-
-            <Button type="submit" disabled={isSubmitting} onClick={onSubmit}>
-              Add contact
-            </Button>
-          </form>
-        )}
+        <Form className={css.form}>
+          <label htmlFor={idName}>Name</label>
+          <Field
+            name="name"
+            type="text"
+            id={idName}
+            placeholder="Input name"
+            required
+          />
+          <ErrorMessage className={css.error} name="name" component="span" />
+          <label htmlFor={idNumber}>Number</label>
+          <Field
+            name="number"
+            type="tel"
+            id={idNumber}
+            placeholder="Input number"
+            required
+          />
+          <ErrorMessage className={css.error} name="number" component="span" />
+          <Button>Add contact</Button>
+        </Form>
       </Formik>
-      <form className={css.form} onSubmit={handleSubmit}>
-        <label htmlFor={idName}>Name</label>
-        <input name="name" type="text" id={idName} required />
-        <label htmlFor={idPhone}>Phone</label>
-        <input name="phone" type="tel" id={idPhone} required />
-        <Button onClick={onSubmit}>Add contact</Button>
-      </form>
     </>
   );
 };
 
 export default ContactForm;
-
-// <button type="submit" disabled={isSubmitting}>
-//   Add contact
-// </button>;
